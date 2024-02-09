@@ -1,37 +1,41 @@
-import { program } from "commander";
-program
-  .option("-a, --action <type>", "choose action")
-  .option("-i, --id <type>", "user id")
-  .option("-n, --name <type>", "user name")
-  .option("-e, --email <type>", "user email")
-  .option("-p, --phone <type>", "user phone");
+const contacts = require("./contacts");
 
-program.parse();
+contacts.readContacts().then(console.log).catch(console.error);
 
-const options = program.opts();
+// import { program } from "commander";
+// program
+//   .option("-a, --action <type>", "choose action")
+//   .option("-i, --id <type>", "user id")
+//   .option("-n, --name <type>", "user name")
+//   .option("-e, --email <type>", "user email")
+//   .option("-p, --phone <type>", "user phone");
 
-// TODO: рефакторити
-async function invokeAction({ action, id, name, email, phone }) {
-  switch (action) {
-    case "list":
-      // ...
-      break;
+// program.parse();
 
-    case "get":
-      // ... id
-      break;
+// const options = program.opts();
 
-    case "add":
-      // ... name email phone
-      break;
+// // TODO: рефакторити
+// async function invokeAction({ action, id, name, email, phone }) {
+//   switch (action) {
+//     case "list":
+//       // ...
+//       break;
 
-    case "remove":
-      // ... id
-      break;
+//     case "get":
+//       // ... id
+//       break;
 
-    default:
-      console.warn("\x1B[31m Unknown action type!");
-  }
-}
+//     case "add":
+//       // ... name email phone
+//       break;
 
-invokeAction(options);
+//     case "remove":
+//       // ... id
+//       break;
+
+//     default:
+//       console.warn("\x1B[31m Unknown action type!");
+//   }
+// }
+
+// invokeAction(options);
