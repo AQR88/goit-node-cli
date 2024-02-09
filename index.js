@@ -1,41 +1,47 @@
-const contacts = require("./contacts");
+const Contacts = require("./contacts");
 
-contacts.readContacts().then(console.log).catch(console.error);
+const { program } = require("commander");
 
-// import { program } from "commander";
-// program
-//   .option("-a, --action <type>", "choose action")
-//   .option("-i, --id <type>", "user id")
-//   .option("-n, --name <type>", "user name")
-//   .option("-e, --email <type>", "user email")
-//   .option("-p, --phone <type>", "user phone");
+async function invokeAction({ action, id, name, email, phone }) {
+  switch (action) {
+    case "list":
+      const contacts = await Contacts.listContacts();
+      return contacts;
 
-// program.parse();
+    case "get":
+      const contact = await Contacts.getContactById(id);
+      return contact;
 
-// const options = program.opts();
+    case "add":
+      const addedContact = await Contacts.addContact({ name, email, phone });
+      return addedContact;
 
-// // TODO: рефакторити
-// async function invokeAction({ action, id, name, email, phone }) {
-//   switch (action) {
-//     case "list":
-//       // ...
-//       break;
+    case "remove":
+      const removedContact = await Contacts.removeContact(id);
+      return removedContact;
 
-//     case "get":
-//       // ... id
-//       break;
+    case "update":
+      const updatedContact = await Contacts.updateContact(id, {
+        name,
+        email,
+        phone,
+      });
+      return updatedContact;
 
-//     case "add":
-//       // ... name email phone
-//       break;
+    default:
+      console.warn("\x1B[31m Unknown action type!");
+  }
+}
 
-//     case "remove":
-//       // ... id
-//       break;
+program
+  .option("-a, --action <type>", "choose action")
+  .option("-i, --id <type>", "user id")
+  .option("-n, --name <type>", "user name")
+  .option("-e, --email <type>", "user email")
+  .option("-p, --phone <type>", "user phone");
 
-//     default:
-//       console.warn("\x1B[31m Unknown action type!");
-//   }
-// }
+program.parse(process.argv);
 
-// invokeAction(options);
+const options = program.opts();
+
+invokeAction(options).then(console.log).catch(console.error);
